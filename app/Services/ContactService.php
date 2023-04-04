@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Requests\ContactRequest;
+use App\Http\Requests\ContactUpdateRequest;
 use App\Http\Resources\ContactResource;
 use App\Interfaces\ContactServiceInterface;
 use App\Models\Contact;
@@ -77,7 +78,7 @@ class ContactService implements ContactServiceInterface
         }
     }
 
-    public function update(Contact $contact, ContactRequest $request): ContactResource|JsonResponse
+    public function update(Contact $contact, ContactUpdateRequest $request): ContactResource|JsonResponse
     {
         $data = $request->validated();
         DB::beginTransaction();
