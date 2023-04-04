@@ -9,8 +9,6 @@ class PhoneNumber extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['contact_id', 'phone_type_id', 'phone_number'];
-
     public function phoneType(){
         return $this->belongsTo(PhoneType::class, 'phone_type_id');
     }

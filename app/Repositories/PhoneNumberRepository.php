@@ -2,9 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\PhoneNumber;
 use App\Models\User;
-use Illuminate\Support\Facades\Validator;
 
 class PhoneNumberRepository
 {
