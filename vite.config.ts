@@ -18,11 +18,15 @@ export default defineConfig({
                    includeAbsolute: false,
                 },
             },
-        })
+        }),
     ],
     resolve: {
         alias: {
             vue: 'vue/dist/vue.esm-bundler.js',
         },
     },
+    test:{
+        globals:true,
+        environment: 'happy-dom',
+    }
 });
