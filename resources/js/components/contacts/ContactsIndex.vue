@@ -62,21 +62,36 @@
     </div>
 </template>
 
-<script setup>
-import useContacts  from "@/composables/contacts";
-import { onMounted } from "vue";
+<script lang="ts">
+import { defineComponent, onMounted } from 'vue';
+import useContacts from '@/composables/contacts';
 
-const { contacts, getContacts, destroyContact } = useContacts()
-
-onMounted(() => {
-  getContacts()
-})
-
-const deleteContact = async (id) => {
-    if (!window.confirm('Are you sure?')) {
-        return
-    }
-    await destroyContact(id);
-    await getContacts();
+interface Contact {
+  id: number;
+  name: string;
 }
+
+export default defineComponent({
+  name: 'Contacts',
+  setup() {
+    const { contacts, getContacts, destroyContact } = useContacts();
+
+    onMounted(() => {
+      getContacts();
+    });
+
+    const deleteContact = async (id: number) => {
+      if (!window.confirm('Are you sure?')) {
+        return;
+      }
+      await destroyContact(id);
+      await getContacts();
+    };
+
+    return {
+      contacts,
+      deleteContact,
+    };
+  },
+});
 </script>

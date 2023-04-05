@@ -10,7 +10,6 @@
             </p>
         </div>
     </div>
-
     <form class="space-y-6" v-on:submit.prevent="saveContact">
       <div class="grid grid-cols-2 gap-2">
         <div>
@@ -119,46 +118,45 @@
     </form>
 </template>
 
-<script setup>
-import useContacts  from "@/composables/contacts";
+<script setup lang="ts">
+import useContacts from "@/composables/contacts";
 import { onMounted } from "vue";
 
-const { errors, contact, phoneTypes, getContact, updateContact, getPhoneTypes } = useContacts()
-const props = defineProps({
-    id: {
-        required: true,
-        type: String
-    }
-})
+interface Props {
+  id: string;
+}
 
+const { errors, contact, phoneTypes, getContact, updateContact, getPhoneTypes } =
+    useContacts();
+const props = defineProps<Props>();
 onMounted(() => {
   getPhoneTypes();
   getContact(props.id);
-})
+});
 
-const saveContact = async () => {
-    await updateContact(props.id)
-}
+const saveContact = async (): Promise<void> => {
+  await updateContact(props.id);
+};
 
-const addPhoneNumber = async () => {
+const addPhoneNumber = async (): Promise<void> => {
   contact.value.phone_numbers.push({
-    phone_type_id : '',
-    phone_number : '',
-  })
-}
+    phone_type_id: "",
+    phone_number: "",
+  });
+};
 
-const deletePhone = async (index) => {
-  contact.value.phone_numbers.splice(index, 1)
-}
+const deletePhone = async (index: number): Promise<void> => {
+  contact.value.phone_numbers.splice(index, 1);
+};
 
-const addAddress = async () => {
+const addAddress = async (): Promise<void> => {
   contact.value.addresses.push({
-    address_line : '',
-    pincode : ''
-  })
-}
+    address_line: "",
+    pincode: "",
+  });
+};
 
-const deleteAddress = async (index) => {
-  contact.value.addresses.splice(index, 1)
-}
+const deleteAddress = async (index: number): Promise<void> => {
+  contact.value.addresses.splice(index, 1);
+};
 </script>

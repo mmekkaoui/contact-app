@@ -1,10 +1,10 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
-import ContactsIndex  from '@/components/contacts/ContactsIndex.vue'
+import ContactsIndex from '@/components/contacts/ContactsIndex.vue'
 import ContactsCreate from '@/components/contacts/ContactsCreate.vue'
-import ContactsEdit   from '@/components/contacts/ContactsEdit.vue'
+import ContactsEdit from '@/components/contacts/ContactsEdit.vue'
 
-const routes = [
+const routes: Array<RouteRecordRaw> = [
     {
         path: '/dashboard',
         name: 'contacts.index',
@@ -23,7 +23,9 @@ const routes = [
     }
 ]
 
-export default createRouter({
+const router = createRouter({
     history: createWebHistory(),
     routes
 })
+
+export default router;

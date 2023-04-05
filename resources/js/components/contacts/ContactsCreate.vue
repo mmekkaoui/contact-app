@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <form class="space-y-6" @submit.prevent="saveCompany">
+    <form class="space-y-6" @submit.prevent="saveContact">
         <div class="grid grid-cols-2 gap-2">
             <div>
                 <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
@@ -119,55 +119,89 @@
     </form>
 </template>
 
-<script setup>
-import {onMounted, reactive} from "vue";
-import useContacts          from "@/composables/contacts";
-import axios        from "axios";
+<script lang="ts">
+import { defineComponent, onMounted, reactive } from 'vue';
+import useContacts from '@/composables/contacts';
 
-const form = reactive({
-    'name': '',
-    'email': '',
-    'phone_numbers' : [
-      {
-        phone_type_id : '',
-        phone_number : ''
-      }
-    ],
-    'addresses' : [
-      {
-        address_line : '',
-        pincode : ''
-      }
-    ],
-})
-const { errors, phoneTypes, storeContact, getPhoneTypes } = useContacts()
-const saveCompany = async () => {
-    await storeContact({ ...form });
+interface PhoneNumber {
+  phone_type_id: string;
+  phone_number: string;
 }
 
-const addPhoneNumber = async () => {
-  form.phone_numbers.push({
-    phone_type_id : '',
-    phone_number : ''
-  })
+interface Address {
+  address_line: string;
+  pincode: string;
 }
 
-const deletePhone = async (index) => {
-  form.phone_numbers.splice(index, 1)
+interface Form {
+  name: string;
+  email: string;
+  phone_numbers: PhoneNumber[];
+  addresses: Address[];
 }
 
-const addAddress = async () => {
-  form.addresses.push({
-    address_line : '',
-    pincode : ''
-  })
-}
+export default defineComponent({
+  name: 'AddContact',
+  setup() {
+    const { errors, phoneTypes, storeContact, getPhoneTypes } = useContacts();
 
-const deleteAddress = async (index) => {
-  form.addresses.splice(index, 1)
-}
+    const form = reactive<Form>({
+      name: '',
+      email: '',
+      phone_numbers: [
+        {
+          phone_type_id: '',
+          phone_number: '',
+        },
+      ],
+      addresses: [
+        {
+          address_line: '',
+          pincode: '',
+        },
+      ],
+    });
 
-onMounted(() => {
-  getPhoneTypes();
-})
+    const saveContact = async () => {
+      await storeContact({ ...form });
+    };
+
+    const addPhoneNumber = () => {
+      form.phone_numbers.push({
+        phone_type_id: '',
+        phone_number: '',
+      });
+    };
+
+    const deletePhone = (index: number) => {
+      form.phone_numbers.splice(index, 1);
+    };
+
+    const addAddress = () => {
+      form.addresses.push({
+        address_line: '',
+        pincode: '',
+      });
+    };
+
+    const deleteAddress = (index: number) => {
+      form.addresses.splice(index, 1);
+    };
+
+    onMounted(() => {
+      getPhoneTypes();
+    });
+
+    return {
+      form,
+      errors,
+      phoneTypes,
+      saveContact,
+      addPhoneNumber,
+      deletePhone,
+      addAddress,
+      deleteAddress,
+    };
+  },
+});
 </script>
