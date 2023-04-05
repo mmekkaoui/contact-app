@@ -33,13 +33,17 @@
                 <template v-for="item in contacts" :key="item.id">
                     <tr class="bg-white">
                         <td class="px-6 py-4 text-sm leading-5 text-gray-900 whitespace-no-wrap text-center">
-                            {{ item.name }}
+                            {{ item?.user?.name }}
                         </td>
                         <td class="px-6 py-4 text-sm leading-5 text-gray-900 whitespace-no-wrap text-center">
-                            {{ item.email }}
+                            {{ item?.user?.email }}
                         </td>
                         <td class="px-6 py-4 text-sm leading-5 text-gray-900 whitespace-no-wrap text-center">
-
+                          <ul>
+                            <li v-for="(phoneNumber, index) in item?.user?.phoneNumbers" :key="index">
+                              {{ phoneNumber.phone_number }}
+                            </li>
+                          </ul>
                         </td>
                         <td class="px-6 py-4 text-sm leading-5 text-gray-900 whitespace-no-wrap text-center">
                             <router-link :to="{ name: 'contacts.edit', params: { id: item.id } }"

@@ -143,7 +143,7 @@ const saveContact = async () => {
 const addPhoneNumber = async () => {
   contact.value.phone_numbers.push({
     phone_type_id : '',
-    phone_number : ''
+    phone_number : '',
   })
 }
 

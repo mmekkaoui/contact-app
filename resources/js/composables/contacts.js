@@ -13,7 +13,7 @@ export default function useContacts() {
 
     const getPhoneTypes = async () => {
         let response = await axios.get('/api/phone-types')
-        phoneTypes.value = response.data.data;
+        phoneTypes.value = response.data;
     }
 
     const getContacts = async () => {
@@ -23,16 +23,14 @@ export default function useContacts() {
 
     const getContact = async (id) => {
         let response = await axios.get('/api/contacts/' + id)
-        contact.value = response.data.data;
-        contact.value.addresses = contact.value.address;
-        contact.value.phone_numbers = contact.value.phone_number;
-        delete contact.value.address;
-        delete contact.value.phone_number;
+        contact.value = response.data.data.user;
+        contact.value.addresses = contact.value.addresses;
+        contact.value.phone_numbers = contact.value.phone_numbers;
     }
 
     const storeContact = async (data) => {
         errors.value = ''
-        axios.post('/api/contacts/', data)
+        axios.post('/api/contacts/', { user: data})
             .then(function(res){
                 if (res.data.status === "success"){
                     notification.notify({
@@ -56,7 +54,7 @@ export default function useContacts() {
 
     const updateContact = async (id) => {
         errors.value = ''
-        axios.put('/api/contacts/' + id, contact.value)
+        axios.put('/api/contacts/' + id, { user: contact.value})
             .then(function(res){
                 if (res.data.status === "success"){
                     notification.notify({

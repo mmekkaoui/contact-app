@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\PhoneTypesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ContactController;
 
@@ -15,3 +16,4 @@ use App\Http\Controllers\Api\ContactController;
 */
 
 Route::apiResource('contacts', ContactController::class);
+Route::get('/phone-types', [PhoneTypesController::class, 'index'] );
