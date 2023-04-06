@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PhoneNumberResource extends JsonResource
+class PhoneTypeResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,8 +16,7 @@ class PhoneNumberResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'phone_type_id' => $this->phone_type_id,
-            'phone_number' => $this->phone_number,
+            'type' => $this->type
         ];
     }
 }

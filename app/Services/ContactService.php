@@ -74,7 +74,7 @@ class ContactService implements ContactServiceInterface
             return response()->json([
                 'status' => 'error',
                 'message' => 'Something went wrong',
-            ]);
+            ], 409);
         }
     }
 
@@ -107,7 +107,7 @@ class ContactService implements ContactServiceInterface
             return response()->json([
                 'status' => 'error',
                 'message' => 'Something went wrong',
-            ]);
+            ], 409);
         }
     }
 

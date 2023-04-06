@@ -5,21 +5,19 @@ import { useNotification } from "@kyvg/vue3-notification";
 
 interface PhoneType {
     id: number;
-    name: string;
+    type: string;
 }
 
 interface Address {
     id: number;
-    street: string;
-    city: string;
-    state: string;
-    zip: string;
+    address_line: string;
+    pincode: string;
 }
 
 interface PhoneNumber {
     id: number;
-    number: string;
-    type_id: number;
+    phone_number: string;
+    phone_type_id: number;
 }
 
 interface User {
@@ -31,7 +29,8 @@ interface User {
 }
 
 interface Contact {
-    data: User;
+    id: number,
+    user: User;
 }
 
 interface ApiResponse {
@@ -41,7 +40,14 @@ interface ApiResponse {
 
 export default function useContacts() {
     const contacts = ref<Contact[]>([])
-    const contact = ref<User>({} as User)
+    const contact = ref<Contact>({
+        user: {
+            name: "",
+            email: "",
+            phone_numbers: [],
+            addresses: []
+        }
+    } as Contact)
     const phoneTypes = ref<PhoneType[]>([])
     const router = useRouter()
     const errors = ref<string>('')
@@ -49,7 +55,7 @@ export default function useContacts() {
 
     const getPhoneTypes = async () => {
         let response = await axios.get<PhoneType[]>('/api/phone-types')
-        phoneTypes.value = response.data;
+        phoneTypes.value = response.data.data;
     }
 
     const getContacts = async () => {
@@ -58,31 +64,25 @@ export default function useContacts() {
     }
 
     const getContact = async (id: number) => {
-        let response = await axios.get<Contact>('/api/contacts/' + id)
-        contact.value = response.data.data;
-        contact.value.addresses = contact.value.addresses || [];
-        contact.value.phone_numbers = contact.value.phone_numbers || [];
+        await axios.get<Contact>('/api/contacts/' + id).then(res => {
+            contact.value = res.data.data;
+        }).catch(res => {
+            console.log(res);
+        })
     }
 
     const storeContact = async (data: User) => {
         errors.value = ''
-        axios.post<ApiResponse>('/api/contacts/', { user: data})
-            .then(function(res){
-                if (res.data.status === "success"){
-                    notification.notify({
-                        title: "Saved",
-                        text: res.data.message,
-                    });
+        axios.post<ApiResponse>('/api/contacts/', { user: data })
+            .then(function (res) {
+                notification.notify({
+                    title: "Saved",
+                    text: res.data.message,
+                });
 
-                    router.push({name: 'contacts.index'})
-                }else{
-                    notification.notify({
-                        title: "Error",
-                        text: res.data.message,
-                    });
-                }
+                router.push('/dashboard')
             })
-            .catch(function(error){
+            .catch(function (error) {
                 console.log(error);
                 errors.value = error.response.data.errors || '';
             });
@@ -90,23 +90,24 @@ export default function useContacts() {
 
     const updateContact = async (id: number) => {
         errors.value = ''
-        axios.put<ApiResponse>('/api/contacts/' + id, { user: contact.value})
-            .then(function(res){
-                if (res.data.status === "success"){
-                    notification.notify({
-                        title: "Updated",
-                        text: res.data.message,
-                    });
+        const data = {
+            ...contact.value,
+            user: {
+                ...contact.value.user,
+                phone_numbers: contact.value.user.phone_numbers.map(_item => ({ id: _item.id, phone_number: _item.phone_number, phone_type_id: _item.phone_type_id }))
+            }
+        }
 
-                    router.push({name: 'contacts.index'})
-                }else{
-                    notification.notify({
-                        title: "Error",
-                        text: res.data.message,
-                    });
-                }
+        axios.put<ApiResponse>('/api/contacts/' + id, data)
+            .then(function (res) {
+                notification.notify({
+                    title: "Updated",
+                    text: res.data.message,
+                });
+
+                router.push('/dashboard')
             })
-            .catch(function(error){
+            .catch(function (error) {
                 console.log(error);
                 errors.value = error.response.data.errors || '';
             });

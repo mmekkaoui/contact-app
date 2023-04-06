@@ -40,7 +40,7 @@
                         </td>
                         <td class="px-6 py-4 text-sm leading-5 text-gray-900 whitespace-no-wrap text-center">
                           <ul>
-                            <li v-for="(phoneNumber, index) in item?.user?.phoneNumbers" :key="index">
+                            <li v-for="(phoneNumber, index) in item?.user?.phone_numbers" :key="index">
                               {{ phoneNumber.phone_number }}
                             </li>
                           </ul>

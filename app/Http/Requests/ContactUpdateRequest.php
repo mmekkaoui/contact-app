@@ -27,11 +27,11 @@ class ContactUpdateRequest extends FormRequest
             "user.name" => 'required|string',
             "user.email" => 'required|email',
             "user.phone_numbers" => 'required|array',
-            'user.phone_numbers.*.id' => 'required',
+            'user.phone_numbers.*.id' => 'sometimes',
             'user.phone_numbers.*.phone_type_id' => 'required',
             'user.phone_numbers.*.phone_number' => 'required|string',
             "user.addresses" => 'required|array',
-            'user.addresses.*.id' => 'required',
+            'user.addresses.*.id' => 'sometimes',
             'user.addresses.*.address_line' => 'required|string',
             'user.addresses.*.pincode' => 'required',
         ];
